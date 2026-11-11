@@ -1,0 +1,10 @@
+# Installed packages (recreate with: npm install)
+node_modules/
+
+# Local screenshots taken while designing
+temporary screenshots/
+
+# Old drafts and reference images (not part of the live site)
+index.old.html
+index.northlight.html
+rulebase.co_.png

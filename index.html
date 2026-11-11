@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Attorney | Pakistan's Legal Intelligence Workspace</title>
+<meta name="description" content="Research, drafting, document review, case diary and cause lists in one workspace, built for Pakistani legal professionals.">
+<meta name="theme-color" content="#004743">
+<link rel="icon" type="image/png" href="brand_assets/og-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Brand greens (brand_assets/brand-guidelines.md) */
+  --primary: #004743;
+  --primary-hover: #01260F;
+  --deep: #003734;
+  --deepest: #002422;
+  --accent: #008B62;
+  --brand-text: #006B45;
+  --heading: #033416;
+  --logo: #06513D;
+  --teal: #005C57;
+  --bright: #059669;
+  /* Neutrals and surfaces */
+  --white: #FFFFFF;
+  --mint-50: #FAFDFB;
+  --mint-100: #EDF8F0;
+  --mint-200: #E7F3ED;
+  --grey-bg: #F1F4F9;
+  --border: #DCE7E1;
+  --border-neutral: #E5E7EB;
+  --ink: #111827;
+  --ink-body: #1A1A1A;
+  --ink-btn: #0A1D1A;
+  --ink-soft: #4B5563;
+  --ink-muted: #6B7280;
+  --rose: #BE123C;
+  /* Gradients */
+  --grad-btn: linear-gradient(to bottom right, #286C37, #10867F);
+  --grad-heading: linear-gradient(to right, #286C37, #008B62);
+  --grad-dark: linear-gradient(to bottom right, #003734, #004743, #002422);
+  --grad-sweep: linear-gradient(to right, #004743, #059669);
+  /* Depth */
+  --shadow-base: 0 1px 2px rgba(0,0,0,.05);
+  --shadow-float: 0 2px 12px rgba(0,0,0,.04), 0 0 0 1px rgba(0,71,67,.06);
+  --shadow-hero: 0 25px 50px -12px rgba(0,0,0,.25);
+  /* Shape */
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-btn: 12px;
+  --radius-sm: 8px;
+  --font: "Inter Tight", "Noto Nastaliq Urdu", system-ui, sans-serif;
+  /* Type scale (desktop) */
+  --h1: 56px; --h1-lh: 62px; --h1-ls: -1.4px;
+  --h2: 38px; --h2-lh: 44px; --h2-ls: -.95px;
+  --section-x: 40px;
+  --layout-gutter: var(--section-x);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+}
+@media (min-width: 641px) {
+  :root { --layout-gutter: max(var(--section-x), calc((100% - 1280px) / 2)); }
+}
+@media (max-width: 1099px) {
+  :root { --h1: 44px; --h1-lh: 50px; --h1-ls: -1.1px; --h2: 32px; --h2-lh: 36px; --h2-ls: -.8px; }
+}
+@media (max-width: 640px) {
+  :root { --section-x: 16px; --h1: 36px; --h1-lh: 42px; --h1-ls: -.9px; --h2: 30px; --h2-lh: 33px; --h2-ls: -.75px; }
+}
+*, :before, :after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--mint-50);
+  font-family: var(--font);
+  color: var(--ink-body);
+  font-size: 16px; line-height: 26px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.hero :focus-visible, .dark :focus-visible, footer :focus-visible { outline-color: #fff; }
+.wrap { padding-inline: var(--layout-gutter); }
+.h2 { font-weight: 600; font-size: var(--h2); line-height: var(--h2-lh); letter-spacing: var(--h2-ls); color: var(--ink); }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: absolute; inset: 0 0 auto 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px var(--layout-gutter);
+  color: #fff;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; letter-spacing: -.3px; }
+.brand img { height: 32px; width: auto; }
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.btn-login {
+  background: #fff; color: var(--primary); font-size: 14px; font-weight: 600;
+  padding: 7px 18px; border-radius: 9999px;
+  transition: transform .25s var(--ease-spring), opacity .2s;
+}
+.btn-login:hover { opacity: .9; }
+.btn-login:active { transform: scale(.96); }
+.menu-btn { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; transition: background-color .2s; }
+.menu-btn:hover { background: rgba(255,255,255,.1); }
+.menu-btn:active { transform: scale(.94); }
+.menu-btn span { display: block; width: 18px; height: 1.5px; background: #fff; box-shadow: 0 6px 0 #fff; transform: translateY(-3px); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; color: #fff; padding-top: 128px; text-align: center; overflow: hidden;
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(16,185,129,.16), transparent 70%),
+    radial-gradient(40% 40% at 90% 80%, rgba(5,150,105,.12), transparent 70%),
+    var(--grad-dark);
+}
+/* Grid pulse: a fine hairline grid behind the hero text whose cells light up
+   in brand greens where the pointer passes, plus a few on their own. */
+.grid-pulse {
+  --grid-pulse-cell: 24px;
+  --grid-pulse-line: rgba(255,255,255,.06);
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-pulse-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-pulse-line) 1px, transparent 1px);
+  background-size: var(--grid-pulse-cell) var(--grid-pulse-cell);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 80%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 80%);
+}
+.grid-pulse canvas { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
+.hero > :not(.grid-pulse) { position: relative; z-index: 1; }
+/* A halo in the hero colour so lit cells never crowd the letters. */
+.hero h1, .hero-sub { text-shadow: 0 0 6px #00403c, 0 0 14px #00403c, 0 0 30px #00403c; }
+.hero-video {
+  display: inline-flex; gap: 14px; text-align: left; align-items: center;
+  max-width: 420px; margin-bottom: 44px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  padding: 8px 16px 8px 8px; border-radius: var(--radius-card);
+}
+.hero-video .thumb {
+  position: relative; width: 112px; height: 70px; flex: none; border-radius: 10px; overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, #0b6b55, #003734);
+  display: grid; place-items: center;
+}
+.hero-video .thumb img { width: 34px; height: auto; opacity: .9; }
+.hero-video p { font-size: 14px; line-height: 19px; color: rgba(255,255,255,.78); }
+.hero-video a { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 14px; font-weight: 600; color: #fff; transition: opacity .2s; }
+.hero-video a:hover { opacity: .8; }
+.hero h1 {
+  font-weight: 700; font-size: var(--h1); line-height: var(--h1-lh); letter-spacing: var(--h1-ls);
+  max-width: 720px; margin-inline: auto; padding-inline: 16px;
+}
+.hero-sub {
+  max-width: 580px; margin: 22px auto 0; padding-inline: 16px;
+  font-size: 18px; line-height: 28px; color: rgba(255,255,255,.8);
+}
+.btn-on-dark {
+  display: inline-block; margin-top: 32px;
+  background: #fff; color: var(--ink-btn);
+  font-size: 15px; font-weight: 600;
+  padding: 14px 32px; border-radius: var(--radius-btn);
+  box-shadow: 0 8px 24px -8px rgba(0,0,0,.35);
+  transition: transform .25s var(--ease-spring), opacity .2s;
+}
+.btn-on-dark:hover { transform: translateY(-1px); opacity: .94; }
+.btn-on-dark:active { transform: translateY(1px) scale(.98); }
+
+.hero-stage { position: relative; margin: 48px auto 0; max-width: 900px; height: 440px; }
+.stone {
+  position: absolute; inset: 0;
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+  overflow: hidden;
+}
+.stone svg { width: 100%; height: 100%; }
+.stone:after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(0,55,52,.2), rgba(0,36,34,.05)); mix-blend-mode: multiply; }
+.chat {
+  position: absolute; left: 50%; top: 44px; transform: translateX(-50%); z-index: 1;
+  width: min(420px, 88%); text-align: left; color: var(--ink-body);
+}
+.chat-card { background: #fff; border-radius: var(--radius-card); box-shadow: var(--shadow-hero); }
+.chat-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; }
+.avatar { width: 28px; height: 28px; border-radius: 8px; background: var(--mint-100); display: grid; place-items: center; flex: none; }
+.avatar img { width: 18px; height: auto; }
+.chat-head strong { font-weight: 600; font-size: 14px; color: var(--ink); }
+.tag { font-size: 12px; line-height: 18px; font-weight: 500; background: var(--mint-100); color: var(--brand-text); padding: 2px 10px; border-radius: 9999px; margin-left: auto; }
+.chat-body { padding: 4px 16px 18px; border-top: 1px solid var(--border); }
+.bubble { font-size: 14px; line-height: 20px; padding: 10px 14px; border-radius: 14px; max-width: 300px; }
+.bubble.q { margin: 14px 0 0 auto; background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
+.bubble-row { display: flex; align-items: flex-end; gap: 8px; margin-top: 14px; }
+.bubble-row .bubble { background: var(--mint-100); color: var(--ink-body); border-bottom-left-radius: 4px; }
+.bubble-row .avatar { width: 22px; height: 22px; border-radius: 6px; }
+.bubble-row .avatar img { width: 14px; }
+.cite { display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.cite span { font-size: 12px; line-height: 18px; font-weight: 500; color: var(--brand-text); background: #fff; border: 1px solid var(--border); padding: 1px 8px; border-radius: 9999px; }
+.chat-foot { margin-top: 8px; display: flex; align-items: center; gap: 10px; padding: 12px 16px; font-size: 14px; color: var(--ink-soft); box-shadow: var(--shadow-float); }
+.chat-foot .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(0,139,98,.15); }
+
+/* ---------- Courts row ---------- */
+.logos { padding-top: 56px; padding-bottom: 88px; background: #fff; }
+.logos > p { font-size: 15px; color: var(--ink-soft); }
+.logo-row { display: flex; gap: 12px; padding-top: 18px; margin-top: 24px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.logo-chip { position: relative; flex: none; height: 56px; padding-inline: 22px; border-radius: var(--radius-btn); background: var(--mint-50); border: 1px solid var(--border); display: grid; place-items: center; font-size: 17px; letter-spacing: -.2px; color: var(--heading); font-weight: 600; white-space: nowrap; }
+.logo-chip .flag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: var(--mint-100); color: var(--brand-text); font-size: 11px; line-height: 18px; font-weight: 600; padding: 2px 10px; border-radius: 9999px; border: 1px solid var(--border); }
+
+/* ---------- Feature grid ---------- */
+.features { padding-top: 88px; }
+.seg { display: inline-flex; gap: 4px; padding: 4px; background: var(--mint-200); border-radius: 9999px; }
+.seg button { font-size: 14px; font-weight: 600; padding: 6px 18px; border-radius: 9999px; color: var(--brand-text); transition: background-color .2s, color .2s; }
+.seg button:hover { background: rgba(255,255,255,.6); }
+.seg button:active { transform: scale(.97); }
+.seg button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+.feature-grid { display: grid; grid-template-columns: 1fr 1fr; background: #fff; margin-top: 24px; border: 1px solid var(--border); border-radius: var(--radius-panel); overflow: hidden; box-shadow: var(--shadow-base); }
+.feature { padding: 28px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.feature:nth-child(2n) { border-right: 0; }
+.feature:nth-child(n+3) { border-bottom: 0; }
+.feature svg { height: 128px; margin: 10px auto 30px; }
+.feature h3 { font-size: 18px; line-height: 28px; font-weight: 600; color: var(--ink); }
+.feature p { margin-top: 6px; font-size: 15px; line-height: 24px; color: var(--ink-soft); max-width: 380px; }
+
+/* ---------- Every matter ---------- */
+.convo { padding-top: 160px; }
+.tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--border); margin-top: 48px; }
+.tabs button { padding: 8px 0 12px; font-size: 15px; font-weight: 500; color: var(--ink-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .2s; }
+.tabs button:hover { color: var(--ink); }
+.tabs button:active { transform: translateY(1px); }
+.tabs button[aria-selected="true"] { color: var(--brand-text); border-color: var(--accent); font-weight: 600; }
+.cases { display: grid; grid-template-columns: 1fr 1fr; gap: 56px 16px; margin-top: 32px; }
+.case-art { position: relative; aspect-ratio: 361 / 380; background: var(--mint-200); border-radius: var(--radius-panel); overflow: hidden; display: grid; place-items: center; }
+.case-art.ink { background: var(--grad-dark); }
+.case > h3 { margin-top: 20px; font-size: 18px; line-height: 28px; font-weight: 600; color: var(--ink); }
+.case > p { margin-top: 4px; font-size: 15px; line-height: 24px; color: var(--ink-soft); max-width: 420px; }
+.texture { position: absolute; width: 170px; height: 170px; top: 0; right: 0; opacity: .7; }
+.texture.green { width: 106px; height: 100px; top: 56px; right: 10px; border-radius: 12px; overflow: hidden; opacity: 1; }
+.panel-card { background: #fff; border-radius: var(--radius-card); box-shadow: var(--shadow-float); }
+
+.score-list { position: relative; width: 80%; }
+.score-list h4 { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--heading); margin: 0 0 8px; }
+.score-list h4:not(:first-child) { margin-top: 22px; }
+.score-row { display: flex; align-items: center; gap: 10px; background: #fff; padding: 9px 12px; border-radius: 10px; box-shadow: var(--shadow-float); font-size: 13px; line-height: 18px; margin-top: 4px; }
+.score-row .num { min-width: 34px; height: 22px; padding-inline: 6px; border-radius: 6px; color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+.score-row .num.sc { background: var(--primary); }
+.score-row .num.hc { background: var(--accent); }
+.score-row .who { flex: 1; color: var(--ink); }
+.score-row .when { color: var(--ink-muted); }
+
+.lesson { width: 80%; padding: 18px; }
+.lesson h4 { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; color: var(--ink); padding: 2px 4px 14px; border-bottom: 1px solid var(--border); }
+.lesson h4 img { width: 18px; }
+.lesson-box { margin-top: 16px; background: var(--mint-50); border: 1px solid var(--border); border-radius: 12px; padding: 14px; font-size: 13px; line-height: 20px; color: var(--ink-soft); }
+.lesson-box div { display: flex; justify-content: space-between; color: var(--ink); font-weight: 600; margin-bottom: 8px; }
+.lesson-box div span { color: var(--brand-text); font-weight: 500; }
+.lesson-box button { margin-top: 14px; background: var(--grad-btn); color: #fff; padding: 7px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; transition: opacity .2s, transform .25s var(--ease-spring); }
+.lesson-box button:hover { opacity: .9; }
+.lesson-box button:active { transform: scale(.97); }
+
+.complaints { position: relative; width: 80%; }
+.complaints .panel { padding: 14px; font-size: 13px; line-height: 20px; position: relative; }
+.complaints .panel h4 { color: var(--brand-text); font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.complaints .panel div { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-top: 1px solid var(--mint-200); color: var(--ink); }
+.complaints .panel div span { color: var(--ink-muted); white-space: nowrap; }
+.complaints .note { margin: 14px 18px 0; font-size: 13px; line-height: 20px; color: var(--ink); }
+.complaints .note small { display: block; color: var(--ink-muted); margin-top: 4px; font-size: 12px; }
+
+.timeline { width: 80%; padding: 16px; font-size: 13px; line-height: 20px; }
+.timeline h4 { color: var(--heading); font-weight: 600; display: flex; gap: 8px; align-items: center; margin-bottom: 14px; }
+.tl-item { position: relative; padding-left: 20px; padding-bottom: 14px; color: var(--ink); }
+.tl-item:before { content: ""; position: absolute; left: 3px; top: 12px; bottom: -4px; width: 1px; background: var(--border); }
+.tl-item:last-child:before { display: none; }
+.tl-item:after { content: ""; position: absolute; left: 0; top: 6px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.tl-item.now:after { background: var(--primary); box-shadow: 0 0 0 4px rgba(0,71,67,.15); }
+.tl-item.next:after { background: var(--border); }
+.tl-item strong { font-weight: 600; }
+.tl-item p { color: var(--ink-muted); display: flex; justify-content: space-between; }
+.tl-item.next { color: var(--ink-muted); padding-bottom: 0; }
+
+.flow { display: flex; flex-direction: column; align-items: center; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink); }
+.flow .node { background: #fff; padding: 9px 14px; border-radius: 10px; box-shadow: var(--shadow-float); white-space: nowrap; }
+.flow .node.end { background: var(--primary); color: #fff; }
+.flow .v { width: 1px; height: 30px; background: #9DBDAE; }
+.flow .split { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 16px; justify-items: center; }
+.flow .split:before { content: ""; position: absolute; top: 0; left: 25%; right: 25%; height: 16px; border: 1px solid #9DBDAE; border-bottom: 0; border-radius: 6px 6px 0 0; }
+
+/* ---------- Coverage story ---------- */
+.story { padding-top: 140px; }
+.story .h2 { max-width: 820px; }
+.story blockquote { margin-top: 32px; font-size: 20px; line-height: 30px; font-weight: 500; color: var(--ink-soft); max-width: 620px; }
+.stats { display: flex; flex-wrap: wrap; gap: 32px 96px; margin-top: 36px; }
+.stats b { display: block; font-weight: 700; font-size: 36px; line-height: 40px; letter-spacing: -.8px; background: var(--grad-heading); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.stats span { font-size: 14px; font-weight: 500; color: var(--ink-muted); }
+.person { margin: 36px 0 0; font-size: 15px; font-weight: 600; color: var(--ink); }
+.person span { display: block; margin-top: 2px; font-weight: 500; color: var(--ink-muted); }
+.video { position: relative; margin-top: 36px; border-radius: var(--radius-panel); overflow: hidden; aspect-ratio: 731 / 420; background: var(--grad-dark); }
+.video img { width: 100%; height: 100%; object-fit: cover; }
+.video:before { content: ""; position: absolute; inset: 0; background: #004743; mix-blend-mode: multiply; opacity: .45; pointer-events: none; }
+.video:after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.6), transparent 60%); pointer-events: none; }
+.play { position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; background: #fff; color: var(--ink-btn); font-size: 15px; font-weight: 600; padding: 12px 24px; border-radius: var(--radius-btn); box-shadow: var(--shadow-hero); transition: transform .3s var(--ease-spring), opacity .2s; }
+.play:hover { transform: translate(-50%, -50%) scale(1.04); }
+.play:active { transform: translate(-50%, -50%) scale(.97); }
+
+.pull { padding-top: 180px; padding-bottom: 130px; text-align: center; }
+.pull blockquote { font-size: 30px; line-height: 40px; font-weight: 500; letter-spacing: -.5px; color: var(--heading); max-width: 760px; margin-inline: auto; }
+.pull .person { margin-top: 40px; }
+
+/* ---------- Dark section ---------- */
+.dark { background: var(--deep); color: #fff; }
+.compliance { padding-top: 110px; }
+.compliance .h2 { color: #fff; max-width: 520px; }
+.compliance > p { margin-top: 22px; font-size: 17px; line-height: 27px; color: rgba(255,255,255,.75); max-width: 620px; }
+.btn-ghost { display: inline-block; margin-top: 26px; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 26px; border-radius: var(--radius-btn); border: 1px solid rgba(255,255,255,.2); transition: background-color .2s, transform .25s var(--ease-spring); }
+.btn-ghost:hover { background: rgba(255,255,255,.08); }
+.btn-ghost:active { transform: scale(.97); }
+.badges { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 80px; }
+.badge { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius-card); padding: 24px 24px 26px; }
+.badge .ico { width: 52px; height: 52px; margin-bottom: 44px; }
+.badge h3 { font-weight: 600; font-size: 20px; line-height: 28px; letter-spacing: -.3px; }
+.badge p { margin-top: 8px; font-size: 15px; line-height: 24px; color: rgba(255,255,255,.7); max-width: 380px; }
+
+.reveal { height: 220vh; position: relative; }
+.reveal-inner { position: sticky; top: 0; height: 100vh; display: grid; place-items: center; padding-inline: 24px; }
+.reveal p { font-weight: 600; font-size: var(--h2); line-height: calc(var(--h2-lh) + 4px); letter-spacing: var(--h2-ls); text-align: center; max-width: 800px; }
+.reveal .w { color: rgba(255,255,255,.18); transition: color .25s; }
+.reveal .w.on { color: #fff; }
+
+/* ---------- Connectors ---------- */
+.stack { padding-top: 120px; padding-bottom: 20px; text-align: center; overflow: hidden; background: var(--grey-bg); }
+.stack .h2 { max-width: 520px; margin-inline: auto; padding-inline: 16px; }
+.stack > p { max-width: 520px; margin: 20px auto 0; padding-inline: 16px; font-size: 16px; line-height: 26px; color: var(--ink-soft); }
+.tile-grid { display: grid; grid-template-columns: repeat(9, 80px); gap: 12px; justify-content: center; margin-top: 48px; padding-bottom: 100px; }
+.tile-grid div { aspect-ratio: 1; border-radius: var(--radius-card); background: #fff; border: 1px solid var(--border-neutral); }
+.tile-grid .hub { background: var(--grad-dark); border: 0; display: grid; place-items: center; box-shadow: 0 12px 28px -10px rgba(0,71,67,.5); }
+.tile-grid .hub img { width: 44px; height: auto; }
+
+/* ---------- Footer ---------- */
+footer { background: var(--deep); color: #fff; padding-top: 72px; padding-bottom: 48px; }
+.foot-top { display: grid; grid-template-columns: 1.6fr repeat(4, 1fr); gap: 24px; }
+footer .brand { font-size: 22px; }
+footer .brand img { height: 48px; }
+footer .tagline { margin-top: 24px; font-size: 15px; line-height: 22px; color: rgba(255,255,255,.7); }
+footer h4 { font-size: 14px; font-weight: 600; color: rgba(255,255,255,.55); margin-top: 6px; }
+footer ul { list-style: none; margin-top: 22px; display: grid; gap: 12px; }
+footer li a { font-size: 15px; line-height: 22px; color: rgba(255,255,255,.9); transition: color .2s; }
+footer li a:hover { color: #6EE7B7; }
+.foot-bottom { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; margin-top: 72px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: 14px; color: rgba(255,255,255,.6); }
+
+/* ---------- Cookie ---------- */
+.cookie {
+  position: fixed; right: 20px; bottom: 20px; z-index: 50;
+  width: 360px; background: #fff; border-radius: var(--radius-card); padding: 18px 16px 16px;
+  box-shadow: 0 0 0 1px rgba(0,71,67,.08), 0 12px 32px rgba(0,36,34,.14), 0 2px 6px rgba(0,36,34,.06);
+  transition: opacity .25s, transform .3s var(--ease-spring);
+}
+.cookie.hide { opacity: 0; transform: translateY(12px); pointer-events: none; }
+.cookie h4 { font-weight: 600; font-size: 15px; color: var(--ink); }
+.cookie p { margin-top: 6px; font-size: 13px; line-height: 19px; color: var(--ink-soft); max-width: 290px; }
+.cookie .row { display: flex; align-items: center; gap: 6px; margin-top: 14px; }
+.cookie .row button { font-size: 13px; font-weight: 600; padding: 8px 12px; border-radius: var(--radius-sm); transition: background-color .2s, opacity .2s; }
+.cookie .row button:hover { background: var(--mint-100); }
+.cookie .row button:active { transform: scale(.97); }
+.cookie .primary { background: var(--grad-btn); color: #fff; }
+.cookie .row .primary:hover { background: var(--grad-btn); opacity: .9; }
+.cookie .link { text-decoration: underline; text-underline-offset: 3px; color: var(--brand-text); }
+.cookie .x { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; display: grid; place-items: center; border-radius: 8px; color: var(--ink-muted); }
+.cookie .x:hover { background: var(--mint-100); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .site-header { padding: 16px; }
+  .brand { font-size: 18px; }
+  .brand img { height: 28px; }
+  .hero { padding-top: 96px; }
+  .hero-video { margin-inline: 16px; }
+  .hero-video .thumb { width: 84px; height: 60px; }
+  .hero-sub { font-size: 16px; line-height: 26px; }
+  .hero-stage { height: 400px; margin-inline: 12px; }
+  .chat { width: 92%; top: 28px; }
+  .logos { padding-top: 44px; padding-bottom: 64px; }
+  .features { padding-top: 64px; }
+  .feature-grid, .cases, .badges { grid-template-columns: 1fr; }
+  .feature { border-right: 0; border-bottom: 1px solid var(--border) !important; padding: 24px; }
+  .feature:last-child { border-bottom: 0 !important; }
+  .convo { padding-top: 110px; }
+  .tabs { gap: 20px; overflow-x: auto; }
+  .tabs button { white-space: nowrap; }
+  .case-art { aspect-ratio: 361 / 400; }
+  .story { padding-top: 110px; }
+  .story blockquote { font-size: 18px; line-height: 28px; }
+  .stats { gap: 24px 40px; }
+  .stats b { font-size: 30px; line-height: 34px; }
+  .pull { padding-top: 120px; padding-bottom: 100px; }
+  .pull blockquote { font-size: 24px; line-height: 32px; }
+  .compliance { padding-top: 88px; }
+  .badges { margin-top: 56px; }
+  .tile-grid { grid-template-columns: repeat(5, 56px); gap: 10px; }
+  .tile-grid div:nth-child(n+16) { display: none; }
+  .foot-top { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+  .foot-top > :first-child { grid-column: 1 / -1; }
+  .cookie { left: 12px; right: 12px; width: auto; bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, :before, :after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" class="brand" aria-label="AI Attorney home">
+    <img src="brand_assets/logo-white.png" alt="" width="35" height="32">
+    AI Attorney
+  </a>
+  <div class="nav-right">
+    <a href="#" class="btn-login">Login</a>
+    <button class="menu-btn" aria-label="Open menu"><span></span></button>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero">
+  <div class="grid-pulse" id="gridPulse" aria-hidden="true"><canvas></canvas></div>
+  <div class="hero-video" data-grid-avoid>
+    <span class="thumb"><img src="brand_assets/logo-white.png" alt=""></span>
+    <div>
+      <p>See research, drafting and the Case Diary working together on one matter.</p>
+      <a href="#story">
+        <svg width="10" height="11" viewBox="0 0 10 11"><path d="M0 0l10 5.5L0 11z" fill="currentColor"/></svg>
+        Watch the tour
+      </a>
+    </div>
+  </div>
+  <h1 data-grid-avoid>Pakistan's Legal Intelligence Workspace</h1>
+  <p class="hero-sub" data-grid-avoid>Research case law, draft pleadings, review documents and follow your cause list in one place, built for Pakistani legal professionals.</p>
+  <a href="#" class="btn-on-dark" data-grid-avoid>Start free trial</a>
+
+  <div class="hero-stage">
+    <div class="stone" aria-hidden="true">
+      <svg viewBox="0 0 900 440" preserveAspectRatio="xMidYMid slice">
+        <filter id="relief" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".008 .012" numOctaves="5" seed="7" result="n"/>
+          <feDiffuseLighting in="n" surfaceScale="6" lighting-color="#d6ebe0" diffuseConstant="1.1">
+            <feDistantLight azimuth="235" elevation="50"/>
+          </feDiffuseLighting>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#relief)"/>
+      </svg>
+    </div>
+    <div class="chat">
+      <div class="chat-card">
+        <div class="chat-head">
+          <span class="avatar"><img src="brand_assets/logo.svg" alt=""></span>
+          <strong>Interactive Chat</strong><span class="tag">Pakistani case law</span>
+        </div>
+        <div class="chat-body">
+          <div class="bubble q">What is the limitation period for a civil revision under section 115 CPC?</div>
+          <div class="bubble-row">
+            <span class="avatar"><img src="brand_assets/logo.svg" alt=""></span>
+            <div class="bubble">Here are the leading judgments on this point, with references you can open and verify before relying on them.
+              <span class="cite"><span>Supreme Court</span><span>Lahore High Court</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-card chat-foot">
+        <span class="dot"></span>
+        Searching the Legal Library
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURTS -->
+<section class="logos wrap">
+  <p>Case law from 50+ courts and tribunals, covering 79+ years.</p>
+  <div class="logo-row" aria-label="Courts covered">
+    <div class="logo-chip"><span class="flag">Apex court</span>Supreme Court of Pakistan</div>
+    <div class="logo-chip">Federal Shariat Court</div>
+    <div class="logo-chip">Lahore High Court</div>
+    <div class="logo-chip">Sindh High Court</div>
+    <div class="logo-chip">Islamabad High Court</div>
+    <div class="logo-chip">Peshawar High Court</div>
+    <div class="logo-chip">Balochistan High Court</div>
+  </div>
+</section>
+
+<!-- FEATURE GRID -->
+<section class="features wrap">
+  <div class="seg" role="group" aria-label="Audience">
+    <button aria-pressed="true" data-set="advocates">Advocates</button>
+    <button aria-pressed="false" data-set="firms">Law firms</button>
+  </div>
+  <div class="feature-grid">
+    <article class="feature">
+      <svg viewBox="0 0 140 110" width="140" fill="none" stroke="#008B62">
+        <g stroke-opacity=".4"><path d="M10 20h120M10 55h120M10 90h120"/></g>
+        <path d="M70 2v106"/>
+        <circle cx="70" cy="55" r="8" fill="#008B62" fill-opacity=".12" stroke-opacity=".4"/>
+        <g fill="#008B62" stroke="none"><circle cx="70" cy="20" r="2"/><circle cx="70" cy="55" r="2"/><circle cx="70" cy="90" r="2"/><circle cx="10" cy="20" r="1"/><circle cx="130" cy="20" r="1"/><circle cx="10" cy="55" r="1"/><circle cx="130" cy="55" r="1"/><circle cx="10" cy="90" r="1"/><circle cx="130" cy="90" r="1"/></g>
+      </svg>
+      <h3>Research</h3>
+      <p>Search the Legal Library by issue, statute or citation, and open each judgment in full.</p>
+    </article>
+    <article class="feature">
+      <svg viewBox="0 0 140 110" width="140" fill="none" stroke="#008B62">
+        <path d="M10 82h68l12-62 12 62h28" />
+        <circle cx="90" cy="20" r="9" fill="#008B62" fill-opacity=".12" stroke-opacity=".4"/>
+        <g fill="#008B62" stroke="none"><circle cx="90" cy="20" r="2.5"/><circle cx="38" cy="82" r="1"/><circle cx="64" cy="82" r="1"/><circle cx="116" cy="82" r="1"/></g>
+      </svg>
+      <h3>Draft</h3>
+      <p>Prepare pleadings, notices and applications in the format Pakistani courts expect.</p>
+    </article>
+    <article class="feature">
+      <svg viewBox="0 0 140 110" width="140" fill="none" stroke="#008B62">
+        <path d="M10 20c30 0 40 30 60 30s30-30 60-30" stroke-opacity=".4"/>
+        <path d="M10 85c30 0 40-30 60-30s30 30 60 30"/>
+        <circle cx="70" cy="52" r="8" fill="#008B62" fill-opacity=".12" stroke-opacity=".4"/>
+        <g fill="#008B62" stroke="none"><circle cx="70" cy="52" r="2"/><circle cx="10" cy="85" r="2"/><circle cx="130" cy="85" r="2"/><circle cx="10" cy="20" r="1"/><circle cx="130" cy="20" r="1"/></g>
+      </svg>
+      <h3>Review</h3>
+      <p>Upload a contract or judgment and see its clauses, risks and key holdings.</p>
+    </article>
+    <article class="feature">
+      <svg viewBox="0 0 140 110" width="140" fill="none" stroke="#008B62">
+        <path d="M14 82c20-8 30-18 50-26s30-14 46-30" stroke-opacity=".4"/>
+        <path d="M14 82c30 16 70 20 86 10s16-40 10-66"/>
+        <circle cx="110" cy="26" r="9" fill="#008B62" fill-opacity=".12" stroke-opacity=".4"/>
+        <g fill="#008B62" stroke="none"><circle cx="110" cy="26" r="2.5"/><circle cx="14" cy="82" r="2"/><circle cx="50" cy="64" r="2"/><circle cx="84" cy="44" r="2"/><circle cx="58" cy="97" r="1"/></g>
+      </svg>
+      <h3>Track</h3>
+      <p>Keep hearings in your Case Diary and see when your matters appear on the cause list.</p>
+    </article>
+  </div>
+</section>
+
+<!-- EVERY MATTER -->
+<section class="convo wrap">
+  <h2 class="h2">Every matter.<br>Better prepared.</h2>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true">Research</button>
+    <button role="tab" aria-selected="false">Drafting</button>
+    <button role="tab" aria-selected="false">Practice management</button>
+  </div>
+
+  <div class="cases">
+    <article class="case">
+      <div class="case-art">
+        <svg class="texture" viewBox="0 0 170 170" aria-hidden="true">
+          <filter id="sand"><feTurbulence type="fractalNoise" baseFrequency=".02 .09" numOctaves="3" seed="3"/><feDiffuseLighting surfaceScale="4" lighting-color="#dcefe4"><feDistantLight azimuth="225" elevation="55"/></feDiffuseLighting></filter>
+          <rect width="170" height="170" filter="url(#sand)"/>
+        </svg>
+        <div class="score-list">
+          <h4><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 10.5h8M3 9V5M6 9V5M9 9V5M1.5 4 6 1.5 10.5 4z"/></svg>Supreme Court</h4>
+          <div class="score-row"><span class="num sc">SC</span><span class="who">Civil appeal, limitation</span><span class="when">2018</span></div>
+          <div class="score-row"><span class="num sc">SC</span><span class="who">Constitutional petition, service</span><span class="when">2021</span></div>
+          <h4><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 10.5h8M3 9V5M6 9V5M9 9V5M1.5 4 6 1.5 10.5 4z"/></svg>Lahore High Court</h4>
+          <div class="score-row"><span class="num hc">LHC</span><span class="who">Civil revision, specific performance</span><span class="when">2022</span></div>
+          <div class="score-row"><span class="num hc">LHC</span><span class="who">Writ petition, tenancy</span><span class="when">2020</span></div>
+        </div>
+      </div>
+      <h3>Research with references you can check</h3>
+      <p>Search 400K+ records and open the judgment behind every reference before you rely on it.</p>
+    </article>
+
+    <article class="case">
+      <div class="case-art ink">
+        <div class="lesson panel-card">
+          <h4><img src="brand_assets/logo.svg" alt="">Legal Drafter</h4>
+          <div class="lesson-box">
+            <div>Bail application <span>Sessions Court</span></div>
+            Post-arrest bail under section 497 CrPC. Facts, grounds and prayer drafted from your notes, ready for your review.
+            <br><button>Generate draft</button>
+          </div>
+        </div>
+      </div>
+      <h3>Draft in the format courts expect</h3>
+      <p>Turn your notes into pleadings, applications and notices, then edit and finalise them yourself.</p>
+    </article>
+
+    <article class="case">
+      <div class="case-art">
+        <svg class="texture green" viewBox="0 0 106 100" aria-hidden="true">
+          <filter id="moss"><feTurbulence type="fractalNoise" baseFrequency=".07 .02" numOctaves="2" seed="9"/><feDiffuseLighting surfaceScale="5" lighting-color="#7fc3a3"><feDistantLight azimuth="200" elevation="50"/></feDiffuseLighting></filter>
+          <rect width="106" height="100" filter="url(#moss)"/>
+        </svg>
+        <div class="complaints">
+          <div class="panel panel-card">
+            <h4><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="2" width="9" height="9" rx="1.5"/><path d="M1.5 5h9M4 1v2M8 1v2"/></svg>Cause list alerts</h4>
+            <div>Lahore High Court, Court 7 <span>Item 14</span></div>
+            <div>Sindh High Court, Court 3 <span>Item 6</span></div>
+            <div>Islamabad High Court, Court 2 <span>Item 21</span></div>
+          </div>
+          <p class="note">Three of your matters are listed for tomorrow. I've added them to your Case Diary.<small>Just now</small></p>
+        </div>
+      </div>
+      <h3>Know when your matters are listed</h3>
+      <p>Cause List checks the daily lists for you and flags every matter you follow.</p>
+    </article>
+
+    <article class="case">
+      <div class="case-art">
+        <div class="timeline panel-card">
+          <h4><svg width="12" height="13" viewBox="0 0 12 13" fill="none" stroke="currentColor"><path d="M1.5 12.5V1m0 0h9l-2 3 2 3h-9"/></svg>Civil revision, Lahore High Court</h4>
+          <div class="tl-item"><strong>Petition filed</strong><p>Registry <span>12 Jan</span></p></div>
+          <div class="tl-item"><strong>Notice issued</strong><p>Respondents served <span>3 Feb</span></p></div>
+          <div class="tl-item now"><strong>Arguments</strong><p>Next date in Case Diary <span>18 Mar</span></p></div>
+          <div class="tl-item next">Order announced</div>
+        </div>
+      </div>
+      <h3>Keep every hearing in one diary</h3>
+      <p>Case Diary tracks dates, orders and next steps for each matter, so nothing depends on memory.</p>
+    </article>
+
+    <article class="case">
+      <div class="case-art">
+        <div class="flow">
+          <div class="node">Agreement uploaded</div>
+          <div class="v"></div>
+          <div class="node">Clauses extracted</div>
+          <div class="v" style="height:16px"></div>
+          <div class="split">
+            <div class="node">Risks flagged</div>
+            <div class="node end">Saved to Knowledge Bank</div>
+          </div>
+        </div>
+      </div>
+      <h3>Review long documents faster</h3>
+      <p>Document Review extracts clauses and flags risks, then saves what matters to your firm's Knowledge Bank.</p>
+    </article>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section class="story wrap" id="story">
+  <h2 class="h2">Built on Pakistani law, from the Supreme Court to specialist tribunals.</h2>
+  <blockquote>[TESTIMONIAL NEEDED: a short quote from a practising advocate or firm partner about research or drafting.]</blockquote>
+  <div class="stats">
+    <div><b>400K+</b><span>Records in the Legal Library</span></div>
+    <div><b>50+</b><span>Courts and tribunals</span></div>
+    <div><b>79+</b><span>Years of case law</span></div>
+  </div>
+  <p class="person">[Name]<span>[Designation, chambers or firm]</span></p>
+  <div class="video">
+    <img src="https://placehold.co/1462x840/0b5a4f/0b5a4f?text=+" alt="Product tour video still">
+    <button class="play"><svg width="12" height="13" viewBox="0 0 10 11"><path d="M0 0l10 5.5L0 11z" fill="currentColor"/></svg>Watch the tour</button>
+  </div>
+</section>
+
+<section class="pull wrap">
+  <blockquote>AI Attorney is a workspace for licensed legal professionals. It reduces research and drafting time, and every output stays subject to your review.</blockquote>
+  <p class="person">AI Attorney<span>Pakistan's Legal Intelligence Workspace</span></p>
+</section>
+
+<!-- DARK -->
+<div class="dark">
+  <section class="compliance wrap">
+    <h2 class="h2">Confidential by design.</h2>
+    <p>Your matters stay private. AI Attorney is aligned with data protection best practices, with zero data retention, audit logs and no training on your data. It runs on third-party AI models under these controls.</p>
+    <a href="#" class="btn-ghost">Read our privacy policy</a>
+    <div class="badges">
+      <article class="badge">
+        <svg class="ico" viewBox="0 0 52 52" fill="none" stroke="#6EE7B7" stroke-width="1.5"><circle cx="26" cy="26" r="24" stroke-opacity=".35"/><path d="M17 20h18M20 20v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V20M23 20v-3h6v3"/><path d="M14 38 38 14" stroke="#fff"/></svg>
+        <h3>Zero data retention</h3>
+        <p>Your prompts and documents are not retained by the AI models that process them.</p>
+      </article>
+      <article class="badge">
+        <svg class="ico" viewBox="0 0 52 52" fill="none" stroke="#6EE7B7" stroke-width="1.5"><circle cx="26" cy="26" r="24" stroke-opacity=".35"/><rect x="17" y="23" width="18" height="13" rx="2.5"/><path d="M21 23v-4a5 5 0 0 1 10 0v4"/><circle cx="26" cy="29.5" r="1.6" fill="#fff" stroke="none"/></svg>
+        <h3>No training on your data</h3>
+        <p>Your files and questions are never used to train AI models.</p>
+      </article>
+      <article class="badge">
+        <svg class="ico" viewBox="0 0 52 52" fill="none" stroke="#6EE7B7" stroke-width="1.5"><circle cx="26" cy="26" r="24" stroke-opacity=".35"/><path d="M19 15h11l5 5v17H19z"/><path d="M23 25h8M23 29h8M23 33h5"/></svg>
+        <h3>Audit logs</h3>
+        <p>See who opened or changed a matter, and when, across your workspace.</p>
+      </article>
+      <article class="badge">
+        <svg class="ico" viewBox="0 0 52 52" fill="none" stroke="#6EE7B7" stroke-width="1.5"><circle cx="26" cy="26" r="24" stroke-opacity=".35"/><path d="M26 14l10 4v8c0 7-4.5 11-10 13-5.5-2-10-6-10-13v-8z"/><path d="M21.5 26.5l3 3 6-6" stroke="#fff"/></svg>
+        <h3>Professional review</h3>
+        <p>AI Attorney supports your work. A licensed professional reviews every output before it is relied on.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="reveal" aria-label="Why it matters">
+    <div class="reveal-inner">
+      <p id="revealText">Judgments sit in law reports, drafts sit in old files, and hearing dates sit in a diary. Hours go into finding what your chambers already knows.</p>
+    </div>
+  </section>
+</div>
+
+<!-- CONNECTORS -->
+<section class="stack">
+  <h2 class="h2">Works with the tools your team already uses.</h2>
+  <p>MCP connectors bring AI Attorney's research and drafting into the tools your firm works in, without changing how you work.</p>
+  <div class="tile-grid" id="tiles"></div>
+</section>
+</main>
+
+<footer class="wrap">
+  <div class="foot-top">
+    <div>
+      <a href="#" class="brand"><img src="brand_assets/logo-white.png" alt="" width="52" height="48">AI Attorney</a>
+      <p class="tagline">Pakistan's Legal Intelligence Workspace.<br>For licensed legal professionals.</p>
+    </div>
+    <div><h4>Product</h4><ul><li><a href="#">Legal Library</a></li><li><a href="#">Interactive Chat</a></li><li><a href="#">Legal Drafter</a></li><li><a href="#">Document Review</a></li><li><a href="#">Case Diary</a></li><li><a href="#">Cause List</a></li></ul></div>
+    <div><h4>Company</h4><ul><li><a href="#">About us</a></li><li><a href="#">Pricing</a></li><li><a href="#">Blogs</a></li><li><a href="#">Contact</a></li></ul></div>
+    <div><h4>Resources</h4><ul><li><a href="#">Help center</a></li><li><a href="#">FAQs</a></li><li><a href="#">Terms and conditions</a></li><li><a href="#">Privacy policy</a></li><li><a href="#" id="cookieOpen">Cookie settings</a></li></ul></div>
+    <div><h4>For firms</h4><ul><li><a href="#">Knowledge Bank</a></li><li><a href="#">Firm Brain</a></li><li><a href="#">Workspaces</a></li><li><a href="#">MCP connectors</a></li></ul></div>
+  </div>
+  <div class="foot-bottom"><span>© AI Attorney 2026</span><span>AI Attorney does not give legal advice. Outputs require review by a licensed professional.</span></div>
+</footer>
+
+<div class="cookie" id="cookie" role="dialog" aria-label="Cookie choices">
+  <h4>Cookie choices</h4>
+  <p>We use optional analytics to improve the site. Nothing optional loads unless you accept.</p>
+  <div class="row">
+    <button class="primary" data-close>Accept all</button>
+    <button data-close>No thanks</button>
+    <button class="link">Details</button>
+  </div>
+  <button class="x" aria-label="Close" data-close><svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.4"><path d="M1 1l10 10M11 1L1 11"/></svg></button>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Grid pulse behind the hero text. Ported from the React "GridPulse" component
+// to plain JS. Cells light where the pointer passes and fade a moment later;
+// a few light on their own so the grid is alive without a mouse. Colours are
+// limited to brand greens and teals (no blue or purple, per the guidelines).
+// The canvas sleeps when nothing is lit, pauses off screen, and stays still
+// for visitors who ask for reduced motion.
+// ---------------------------------------------------------------------------
+(() => {
+  const el = document.getElementById('gridPulse');
+  const paper = el && el.querySelector('canvas');
+  const ctx = paper && paper.getContext('2d');
+  if (!ctx || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const CELL = 24, REACH = 2.6, AMBIENT = 2, MAX_LIT = 180;
+  const HUE_TOP = 150, HUE_SPAN = 25;          // emerald at the top, turning to teal
+  const TINTS = [62, 56, 50, 44, 38];          // lightness ladder for a dark ground
+  const MAX_ALPHA = 0.55;                      // keeps the effect calm and institutional
+  const FAINT = 0.13, FADE = 2.2, PAD = 5, FADE_IN = 160, FADE_OUT = 750;
+  const scope = el.parentElement;
+
+  let cols = 1, rows = 1, width = 0, height = 0, clear = [];
+  const cells = new Map();
+  const easeOut = t => 1 - (1 - t) ** 2;
+  const easeIn = t => t * t;
+
+  // Hold the light back from the actual lines of text, not their boxes.
+  function measureText() {
+    const b = el.getBoundingClientRect();
+    clear = [...scope.querySelectorAll('[data-grid-avoid]')].flatMap(node => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const lines = [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0);
+      return (lines.length ? lines : [node.getBoundingClientRect()]).map(r =>
+        new DOMRect(r.left - b.left - PAD, r.top - b.top - PAD, r.width + PAD * 2, r.height + PAD * 2));
+    });
+  }
+  function measure() {
+    width = el.clientWidth; height = el.clientHeight;
+    cols = Math.max(1, Math.ceil(width / CELL));
+    rows = Math.max(1, Math.ceil(height / CELL));
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    paper.width = Math.round(width * dpr);
+    paper.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    measureText();
+    wake();
+  }
+  // Cells behind words go faint rather than dark, then recover with distance.
+  function brightness(col, row) {
+    const x = col * CELL + CELL / 2, y = row * CELL + CELL / 2;
+    let nearest = Infinity;
+    for (const r of clear) {
+      const dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
+      nearest = Math.min(nearest, Math.hypot(dx, dy));
+      if (nearest === 0) break;
+    }
+    if (nearest === Infinity) return 1;
+    return FAINT + (1 - FAINT) * Math.min(1, nearest / (FADE * CELL));
+  }
+  function ink(row) {
+    const t = rows > 1 ? Math.min(1, row / (rows - 1)) : 0;
+    const tint = TINTS[Math.floor(Math.random() * TINTS.length)];
+    return `hsl(${Math.round(HUE_TOP + t * HUE_SPAN)} 72% ${tint}%)`;
+  }
+
+  let frame = 0;
+  function draw(now) {
+    frame = 0;
+    ctx.clearRect(0, 0, width, height);
+    for (const [key, c] of cells) {
+      let alpha;
+      if (now < c.until) alpha = easeOut(Math.min(1, (now - c.born) / FADE_IN));
+      else {
+        const t = (now - c.until) / FADE_OUT;
+        if (t >= 1) { cells.delete(key); continue; }
+        alpha = 1 - easeIn(t);
+      }
+      ctx.globalAlpha = alpha * c.dim * MAX_ALPHA;
+      ctx.fillStyle = c.colour;
+      ctx.fillRect(c.col * CELL + 1, c.row * CELL + 1, CELL - 1, CELL - 1);
+    }
+    ctx.globalAlpha = 1;
+    if (cells.size > 0) frame = requestAnimationFrame(draw);
+  }
+  function wake() { if (!frame) frame = requestAnimationFrame(draw); }
+
+  function light(col, row, hold) {
+    if (col < 0 || row < 0 || col >= cols || row >= rows || cells.size >= MAX_LIT) return;
+    const key = col + ',' + row, now = performance.now(), lit = cells.get(key);
+    if (lit && now < lit.until) return;
+    let born = now;
+    if (lit) {
+      const faded = 1 - easeIn(Math.min(1, (now - lit.until) / FADE_OUT));
+      born = now - (1 - Math.sqrt(1 - faded)) * FADE_IN;
+    }
+    cells.set(key, { col, row, colour: lit ? lit.colour : ink(row), dim: brightness(col, row), born, until: now + hold });
+    wake();
+  }
+
+  // The pointer paints; cells further away catch light less often.
+  let pending = 0, at = null;
+  function paint() {
+    pending = 0;
+    if (!at) return;
+    const cx = Math.floor(at.x / CELL), cy = Math.floor(at.y / CELL), span = Math.ceil(REACH);
+    for (let dy = -span; dy <= span; dy++)
+      for (let dx = -span; dx <= span; dx++) {
+        const away = Math.hypot(dx, dy);
+        if (away > REACH || Math.random() > 1 - away / (REACH + 0.6)) continue;
+        light(cx + dx, cy + dy, 260 + Math.random() * 900);
+      }
+  }
+  addEventListener('pointermove', e => {
+    const b = el.getBoundingClientRect();
+    at = { x: e.clientX - b.left, y: e.clientY - b.top };
+    if (!pending) pending = requestAnimationFrame(paint);
+  }, { passive: true });
+
+  // Ambient cells, paused while the hero is out of sight.
+  let visible = true;
+  (function drift() {
+    setTimeout(drift, 1400 + Math.random() * 1800);
+    if (!visible || document.hidden) return;
+    for (let i = 0; i < AMBIENT; i++)
+      light(Math.floor(Math.random() * cols), Math.floor(Math.random() * (rows * 0.6)), 900 + Math.random() * 1600);
+  })();
+
+  new IntersectionObserver(([e]) => { visible = e ? e.isIntersecting : true; }).observe(el);
+  new ResizeObserver(measure).observe(el);
+  measure();
+  if (document.fonts) document.fonts.ready.then(measureText).catch(() => {});
+})();
+
+// Connector tiles (3 rows x 9, centre = AI Attorney logo)
+const tiles = document.getElementById('tiles');
+for (let i = 0; i < 27; i++) {
+  const d = document.createElement('div');
+  if (i === 13) { d.className = 'hub'; d.innerHTML = '<img src="brand_assets/logo-white.png" alt="AI Attorney">'; }
+  tiles.appendChild(d);
+}
+
+// Audience toggle swaps the four feature cards
+const featureSets = {
+  advocates: [
+    ['Research', 'Search the Legal Library by issue, statute or citation, and open each judgment in full.'],
+    ['Draft', 'Prepare pleadings, notices and applications in the format Pakistani courts expect.'],
+    ['Review', 'Upload a contract or judgment and see its clauses, risks and key holdings.'],
+    ['Track', 'Keep hearings in your Case Diary and see when your matters appear on the cause list.'],
+  ],
+  firms: [
+    ['Knowledge Bank', "Keep the firm's precedents, opinions and templates in one searchable place."],
+    ['Firm Brain', 'Ask questions of your own documents and get answers with references to the source.'],
+    ['Workspaces', 'Associates and partners work on the same matter, with audit logs of every change.'],
+    ['MCP connectors', 'Bring AI Attorney into the tools your team already uses.'],
+  ],
+};
+const featureEls = document.querySelectorAll('.feature');
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+  featureSets[b.dataset.set].forEach(([title, text], i) => {
+    featureEls[i].querySelector('h3').textContent = title;
+    featureEls[i].querySelector('p').textContent = text;
+  });
+}));
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.setAttribute('aria-selected', x === b));
+}));
+
+// Scroll-linked word reveal
+const rp = document.getElementById('revealText');
+rp.innerHTML = rp.textContent.split(' ').map(w => `<span class="w">${w}</span>`).join(' ');
+const words = rp.querySelectorAll('.w');
+const section = document.querySelector('.reveal');
+function onScroll() {
+  const r = section.getBoundingClientRect();
+  const total = section.offsetHeight - innerHeight;
+  const p = Math.min(1, Math.max(0, -r.top / total));
+  const lit = Math.max(1, Math.round(p * words.length));
+  words.forEach((w, i) => w.classList.toggle('on', i < lit));
+}
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+// Cookie banner
+const cookie = document.getElementById('cookie');
+cookie.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => cookie.classList.add('hide')));
+document.getElementById('cookieOpen').addEventListener('click', e => { e.preventDefault(); cookie.classList.remove('hide'); });
+</script>
+</body>
+</html>
