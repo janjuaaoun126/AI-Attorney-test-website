@@ -155,16 +155,60 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   max-width: 580px; margin: 22px auto 0; padding-inline: 16px;
   font-size: 18px; line-height: 28px; color: rgba(255,255,255,.8);
 }
+/* Hero CTA: white-mint surface, breathing brand-green glow, sheen on hover */
 .btn-on-dark {
-  display: inline-block; margin-top: 32px;
-  background: #fff; color: var(--ink-btn);
-  font-size: 15px; font-weight: 600;
-  padding: 14px 32px; border-radius: var(--radius-btn);
-  box-shadow: 0 8px 24px -8px rgba(0,0,0,.35);
-  transition: transform .25s var(--ease-spring), opacity .2s;
+  position: relative; display: inline-block; margin-top: 34px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #EAF7EF 100%);
+  color: var(--heading);
+  font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em;
+  padding: 15px 36px; border-radius: var(--radius-btn);
+  border: 1px solid rgba(255,255,255,.85);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -2px 6px rgba(0,139,98,.14),
+    0 1px 2px rgba(0,36,34,.4),
+    0 10px 28px -10px rgba(0,20,18,.6);
+  transition: transform .35s var(--ease-spring);
 }
-.btn-on-dark:hover { transform: translateY(-1px); opacity: .94; }
+/* The glow: a halo drawn only outside the button, fading in and out */
+.btn-on-dark::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none;
+  box-shadow:
+    0 0 0 1px rgba(110,231,183,.5),
+    0 0 22px 4px rgba(16,185,129,.6),
+    0 0 64px 14px rgba(5,150,105,.42);
+  opacity: .55;
+  animation: cta-breathe 3.6s ease-in-out infinite;
+  transition: opacity .3s;
+}
+/* The sheen: a soft band of light that crosses the face on hover */
+.btn-on-dark .sheen {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none;
+}
+.btn-on-dark .sheen::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(105deg, transparent 0%, rgba(110,231,183,.55) 50%, transparent 100%);
+  transform: translateX(-160%) skewX(-12deg);
+  opacity: 0;
+}
+.btn-on-dark .label { position: relative; }
+.btn-on-dark:hover { transform: translateY(-2px); }
+.btn-on-dark:hover::before { animation: none; opacity: 1; }
+.btn-on-dark:hover .sheen::after {
+  opacity: 1; transform: translateX(330%) skewX(-12deg);
+  transition: transform .8s cubic-bezier(.2,.7,.2,1), opacity .2s;
+}
 .btn-on-dark:active { transform: translateY(1px) scale(.98); }
+.btn-on-dark:focus-visible { outline: 2px solid #6EE7B7; outline-offset: 4px; }
+.btn-on-dark:focus-visible::before { animation: none; opacity: 1; }
+@keyframes cta-breathe {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-on-dark::before { animation: none; opacity: .75; }
+  .btn-on-dark .sheen::after { display: none; }
+}
 
 .hero-stage { position: relative; margin: 48px auto 0; max-width: 900px; height: 440px; }
 .stone {
@@ -431,7 +475,7 @@ footer li a:hover { color: #6EE7B7; }
   </div>
   <h1 data-grid-avoid>Pakistan's Legal Intelligence Workspace</h1>
   <p class="hero-sub" data-grid-avoid>Research case law, draft pleadings, review documents and follow your cause list in one place, built for Pakistani legal professionals.</p>
-  <a href="#" class="btn-on-dark" data-grid-avoid>Start free trial</a>
+  <a href="#" class="btn-on-dark" data-grid-avoid><span class="sheen" aria-hidden="true"></span><span class="label">Start free trial</span></a>
 
   <div class="hero-stage">
     <div class="stone" aria-hidden="true">

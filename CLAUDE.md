@@ -38,6 +38,13 @@
 - Check: spacing/padding, font size/weight/line-height, colors (exact hex), alignment, border-radius, shadows, image sizing.
 - Check both desktop and `--mobile` screenshots before saying a page is done.
 
+## Deployment (GitHub → Vercel)
+- This folder is synced to GitHub: `https://github.com/janjuaaoun126/AI-Attorney-test-website` (branch `main`).
+- Vercel watches that repo. Anything pushed to `main` goes live on the real site automatically.
+- **Test every change on localhost only** (`http://localhost:3000`). Do not commit or push while we are working.
+- **Only commit and push to GitHub when I explicitly say so** (e.g. "push this to GitHub" or "push these changes"). Finishing a task, or me saying a change looks good, is NOT permission to push.
+- When I do ask you to push: show me which files changed, commit with a short clear message, then run `git push`.
+
 ## Output Defaults
 - Single `index.html` file, all styles inline, unless I say otherwise.
 - Tailwind CSS via CDN: `<script src="https://cdn.tailwindcss.com"></script>`
